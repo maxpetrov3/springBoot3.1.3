@@ -1,47 +1,76 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title></title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
 </head>
 <body>
-<div>
-    <table border="1">
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Last Name</th>
-            <th>Age</th>
-            <th>Username</th>
-            <th>Roles</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-        <tr th:each="user : ${users}">
-            <td><span th:text="${user.getId()}"> Title </span></td>
-            <td><span th:text="${user.getName()}"> Title </span></td>
-            <td><span th:text="${user.getLastName()}"> Title </span></td>
-            <td><span th:text="${user.getAge()}"> Title </span></td>
-            <td><span th:text="${user.getUsername()}"> Title </span></td>
-            <td>
-                <p th:each="role : ${user.getAuthorities()}">
-                <span th:text="${role.getAuthority()}"></span>
-                </p>
-            </td>
-            <td><a th:href="@{/changeUserData(userId=${user.getId()})}">Edit</a></td>
-            <td>
-                <form method="Post" th:action="@{/delete}">
-                    <button type="submit" th:name = "delId" th:value="${user.getId()}" name="submit" >Delete</button>
-                </form>
-            </td>
-        </tr>
-    </table>
-
-    <a th:href="@{/changeUserData(userId=0)}">New User</a>
-    <form th:action="@{/logout}" method="POST">
-        <input type="submit" value="Logout"/>
-    </form>
+<div class="container-fluid">
+    <div class="row">
+        <h1>Admin panel</h1>
+    </div>
+    <div class="row">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="admin-tab" data-toggle="tab" href="#user-table" role="tab"
+                   aria-controls="admin" aria-selected="true">User table</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="user-tab" data-toggle="tab" href="#new-user" role="tab" aria-controls="user"
+                   aria-selected="false">New user</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="user-table" role="tabpanel" aria-labelledby="home-tab">
+                <h3>All users</h3>
+                <table class="table">
+                    <thead>
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>id</td>
+                            <td>name</td>
+                            <td>lastname</td>
+                            <td>AGE</td>
+                            <td>EMAIL</td>
+                            <td>role</td>
+                            <td><button type="button" class="btn btn-primary">Edit</button></td>
+                            <td><button type="button" class="btn btn-danger">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="new-user" role="tabpanel" aria-labelledby="profile-tab">user</div>
+        </div>
+    </div>
 </div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
