@@ -17,7 +17,7 @@ public class AdminController {
 	@GetMapping(value = "/admin")
 	public String getUsers(ModelMap model) {
 		model.addAttribute("users", userService.getAllUsers());
-		return "mainPanel";
+		return "admin";
 	}
 
 	@PostMapping(value = "/delete")
