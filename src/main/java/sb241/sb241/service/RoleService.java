@@ -6,6 +6,8 @@ import sb241.sb241.model.Role;
 import sb241.sb241.repositories.RoleRepository;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -14,8 +16,8 @@ public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    public List<Role> getAllRoles() {
-        return roleRepository.findAll();
+    public Set<Role> getAllRoles() {
+        return roleRepository.findAll().stream().collect(Collectors.toSet());
     }
 
     public Role getRoleById(Long id) {

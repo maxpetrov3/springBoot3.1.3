@@ -6,11 +6,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import sb241.sb241.model.Role;
 import sb241.sb241.model.User;
+import sb241.sb241.service.RoleService;
 import sb241.sb241.service.UserService;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -18,6 +22,9 @@ public class AdminController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private RoleService roleService;
 
 	@GetMapping(value = "/adminPanel")
 	public String getUsers(ModelMap model) {
@@ -30,6 +37,17 @@ public class AdminController {
 		model.addAttribute("roles", roles);
 		model.addAttribute("users", userService.getAllUsers());
 		return "adminPanel";
+	}
+
+	@ModelAttribute("allRoles")
+	public Set<Role> populateVarieties() {
+		return roleService.getAllRoles();
+	}
+	@ModelAttribute("newUser")
+	public User newUser() {
+		User user = new User();
+		user.setName("12123");
+		return user;
 	}
 
 }

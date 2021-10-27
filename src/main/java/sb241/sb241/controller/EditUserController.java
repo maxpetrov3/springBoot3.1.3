@@ -13,6 +13,7 @@ import sb241.sb241.service.RoleService;
 import sb241.sb241.service.UserService;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -29,7 +30,7 @@ public class EditUserController {
 
     @GetMapping(value = "/changeUserData")
     public String getUserData(@RequestParam(name = "userId", defaultValue = "0", required = false) Long userId, ModelMap model) {
-        List<Role> allRoles = roleService.getAllRoles();
+        Set<Role> allRoles = roleService.getAllRoles();
         if (newUser == null) {
             if (userId != 0) {
                 newUser = userService.getUserById(userId);
@@ -37,16 +38,16 @@ public class EditUserController {
                 newUser = new User();
                 newUser.setAuthorities(allRoles.stream()
                         .filter(x -> x.getRoleName().equalsIgnoreCase("ROLE_USER"))
-                        .collect(Collectors.toList()));
+                        .collect(Collectors.toSet()));
             }
         }
 
         model.addAttribute("tuser", newUser);
-        List<Role> uRoles = newUser.getAuthorities();
+        Set<Role> uRoles = newUser.getAuthorities();
         for (Role role : uRoles) {
             allRoles = allRoles.stream()
                     .filter(x -> !x.getId().equals(role.getId()))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
         }
 
         model.addAttribute("roles", allRoles);
@@ -66,7 +67,7 @@ public class EditUserController {
 
     @PostMapping(value = "/addRole")
     public String addNewRole(@RequestParam(name = "newRoleId") Long newRoleId) {
-        List<Role> uRoles = newUser.getAuthorities();
+        Set<Role> uRoles = newUser.getAuthorities();
         uRoles.add(roleService.getRoleById(newRoleId));
         newUser.setAuthorities(uRoles);
 
@@ -75,10 +76,10 @@ public class EditUserController {
 
     @PostMapping(value = "/deleteRole")
     public String deleteRole(@RequestParam(name = "roleId") Long roleId) {
-        List<Role> uRoles = newUser.getAuthorities();
+        Set<Role> uRoles = newUser.getAuthorities();
         uRoles = uRoles.stream()
                 .filter(x -> !x.getId().equals(roleId))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         newUser.setAuthorities(uRoles);
 
         return "redirect:/changeUserData";

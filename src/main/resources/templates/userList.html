@@ -56,10 +56,15 @@
                     </div>
                 </div>
                 <div class="tab-pane fade" id="new-user" role="tabpanel" aria-labelledby="profile-tab">
-                    <h3>Add new user</h3>
-                    <div th:replace="/userForm :: userForm"></div>
+                    <div class="card-header">
+                        <h3>Add new user</h3>
+                    </div>
+                    <div class="card-body bg-white">
+                        <div th:replace="/userForm :: userForm"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
