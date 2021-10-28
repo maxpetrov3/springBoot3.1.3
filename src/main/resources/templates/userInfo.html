@@ -23,7 +23,11 @@
                     <td><span th:text="${user.getLastName()}"> Title </span></td>
                     <td><span th:text="${user.getAge()}"> Title </span></td>
                     <td><span th:text="${user.getUsername()}"> Title </span></td>
-                    <td><span th:each="role: ${user.authorities}"> <span th:text="${role.authority}"></span></span></td>
+                    <td>
+                        <div th:each="role: ${user.authorities}">
+                            <span th:text="${role.roleName.replace('ROLE_', '')}"></span>
+                        </div>
+                    </td>
                     <td>
                 </tr>
                 </tbody>

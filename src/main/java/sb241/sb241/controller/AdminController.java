@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import sb241.sb241.model.Role;
 import sb241.sb241.model.User;
 import sb241.sb241.service.RoleService;
@@ -36,18 +34,17 @@ public class AdminController {
 		model.addAttribute("user", userDetails);
 		model.addAttribute("roles", roles);
 		model.addAttribute("users", userService.getAllUsers());
-		return "adminPanel";
+		return "adminPage";
 	}
 
 	@ModelAttribute("allRoles")
 	public Set<Role> populateVarieties() {
 		return roleService.getAllRoles();
 	}
+
 	@ModelAttribute("newUser")
 	public User newUser() {
-		User user = new User();
-		user.setName("12123");
-		return user;
+		return new User();
 	}
 
 }

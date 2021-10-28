@@ -1,39 +1,44 @@
-<div th:fragment="userForm">
+<div th:fragment="userForm (tuser, toDelete, idVisible)">
     <div class="container-fluid">
         <div class="row justify-content-md-center">
-            <form action="#" th:action="@{/saveNewUser}" th:object="${newUser}" method="post" class="justify-content-md-center">
-                <div class="form-group">
+            <form action="#" th:action="@{/saveNewUser}" th:object="${user}" method="post" class="justify-content-md-center">
+                <div class="form-group" th:hidden="${idVisible}" >
+                    <label for="id" >ID</label>
+                    <input type="text" class="form-control" id="id" aria-describedby="firstname" th:readonly="${toDelete}"
+                           placeholder="Enter First Name" th:field="*{id}">
+                </div>
+                <div class="form-group" >
                     <label for="first-name"> First Name</label>
-                    <input type="text" class="form-control" id="first-name" aria-describedby="firstname"
+                    <input type="text" class="form-control" id="first-name" aria-describedby="firstname" th:readonly="${toDelete}"
                            placeholder="Enter First Name" th:field="*{name}">
                 </div>
                 <div class="form-group">
                     <label for="last-name">Last Name</label>
-                    <input type="text" class="form-control" id="last-name" aria-describedby="lastname"
+                    <input type="text" class="form-control" id="last-name" aria-describedby="lastname" th:readonly="${toDelete}"
                            placeholder="Enter Last Name" th:field="*{lastName}">
                 </div>
                 <div class="form-group">
                     <label for="age">Age</label>
-                    <input type="number" class="form-control" id="age" aria-describedby="age"
+                    <input type="number" class="form-control" id="age" aria-describedby="age" th:readonly="${toDelete}"
                            placeholder="Enter Age" th:field="*{age}">
                 </div>
                 <div class="form-group">
                     <label for="Email">Email</label>
-                    <input type="email" class="form-control" id="Email" placeholder="email" th:field="*{username}">
+                    <input type="email" class="form-control" id="Email" placeholder="email" th:field="*{username}" th:readonly="${toDelete}">
                 </div>
                 <div class="form-group">
                     <label for="pass">Password</label>
-                    <input type="password" class="form-control" id="pass" placeholder="Password" th:field="*{password}">
+                    <input type="password" class="form-control" id="pass" placeholder="Password" th:field="*{password}" th:readonly="${toDelete}">
                 </div>
                 <div class="form-group">
                     <label for="roles">Role</label>
-                    <select multiple class="form-control" id="roles" th:name="*{authorities}" >
+                    <select multiple class="form-control" id="roles" th:field="*{authorities}" th:readonly="${toDelete}">
                         <div th:each="role : ${allRoles}">
                             <option th:value="${role.id}" th:text="${role.roleName.replace('ROLE_', '')}">role</option>
                         </div>
                     </select>
                 </div>
-                <div class="row justify-content-md-center">
+                <div class="row justify-content-md-center" th:hidden="${toDelete}">
                     <button type="submit" class="btn btn-success">Add new user</button>
                 </div>
             </form>
