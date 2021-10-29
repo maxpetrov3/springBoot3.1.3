@@ -1,0 +1,56 @@
+<div th:fragment="modal (tuser)">
+    <div class="modal" tabindex="-1" role="form" id="modal" th:attrappend="id=${tuser.id}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete user</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="id">ID</label>
+                        <input type="text" class="form-control" id="id" readonly
+                               placeholder="Enter First Name" th:value="${tuser.id}">
+                    </div>
+                    <div class="form-group">
+                        <label for="first-name"> First Name</label>
+                        <input type="text" class="form-control" id="first-name" readonly
+                               placeholder="Enter Last Name" th:value="${tuser.name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Last Name</label>
+                        <input type="text" class="form-control" id="last-name" readonly
+                               placeholder="Enter Age" th:value="${tuser.lastName}">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="text" class="form-control" id="age" readonly
+                               placeholder="Enter Age" th:value="${tuser.age}">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" readonly
+                               placeholder="Enter Username" th:value="${tuser.username}">
+                    </div>
+                    <div class="form-group">
+                        <label for="roles">Role</label>
+                        <select multiple class="form-control" id="roles" th:value="${tuser.authorities}" readonly>
+                            <div th:each="role : ${tuser.authorities}">
+                                <option th:value="${role.id}" th:text="${role.roleName.replace('ROLE_', '')}">role</option>
+                            </div>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+                    <form th:action="@{/deleteUser}" method="post">
+                        <button type="submit"  class="btn btn-danger"
+                                th:name = "delId" th:value="${tuser.id}">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

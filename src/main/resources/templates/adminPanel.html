@@ -41,14 +41,19 @@
                                     <td><span th:text="${tuser.getLastName()}"> Title </span></td>
                                     <td><span th:text="${tuser.getAge()}"> Title </span></td>
                                     <td><span th:text="${tuser.getUsername()}"> Title </span></td>
-                                    <td><span th:each="role: ${tuser.authorities}"> <span
-                                            th:text="${role.authority.replace('ROLE_', '')}"></span></span></td>
-                                    <td>
-                                        <button type="button" class="btn btn-info">Edit</button>
+                                    <td><span th:each="role: ${tuser.authorities}">
+                                        <span th:text="${role.authority.replace('ROLE_', '')}"></span>
+                                    </span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete</button>
-                                        <div th:replace="/modal :: modal(${tuser}, true, false)"></div>
+                                        <button class="btn btn-info" data-toggle="emodal" data-target="#emodal"
+                                                th:attrappend="data-target=${tuser.id}">Edit</button>
+                                        <div th:replace="/editModal :: modal(${tuser})"></div>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" data-toggle="modal" data-target="#modal"
+                                                th:attrappend="data-target=${tuser.id}">Delete</button>
+                                        <div th:replace="/deleteModal :: modal(${tuser})"></div>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -61,7 +66,9 @@
                         <h3>Add new user</h3>
                     </div>
                     <div class="card-body bg-white">
-                        <div th:replace="/userForm :: userForm(${newUser}, false, true)"></div>
+
+                        <div th:replace="/newUserForm :: userForm"></div>
+
                     </div>
                 </div>
             </div>

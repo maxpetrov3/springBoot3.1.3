@@ -34,7 +34,7 @@ public class AdminController {
 		model.addAttribute("user", userDetails);
 		model.addAttribute("roles", roles);
 		model.addAttribute("users", userService.getAllUsers());
-		return "adminPage";
+		return "mainPage";
 	}
 
 	@ModelAttribute("allRoles")

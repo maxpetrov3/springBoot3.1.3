@@ -8,10 +8,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import sb241.sb241.model.Role;
 import sb241.sb241.model.User;
+import sb241.sb241.service.RoleService;
 import sb241.sb241.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -29,19 +33,36 @@ public class UserController {
                 .collect(Collectors.joining(" "));
         model.addAttribute("user", userDetails);
         model.addAttribute("roles", roles);
-        return "userPanel";
+        return "userInfo";
     }
 
     @PostMapping("/deleteUser")
-    public String deleteUser(@ModelAttribute("tuser") User user) {
-            userService.deleteUserById(user.getId());
-        return "redirect:/adminPage";
+    public String deleteUser(@RequestParam("delId") Long id) {
+        userService.deleteUserById(id);
+        return "redirect:/adminPanel";
     }
 
     @PostMapping("/saveNewUser")
     public String saveNewUser(@ModelAttribute("user") User user) {
         userService.saveUser(user);
 
+        return "redirect:/adminPanel";
+    }
+
+    @PostMapping("/editUser")
+    public String saveChanges(
+            @ModelAttribute("id") Long id,
+            @ModelAttribute("name") String name,
+            @ModelAttribute("lastName") String lastname,
+            @ModelAttribute("username") String username,
+            @ModelAttribute("password") String password,
+            @ModelAttribute("age") Integer age,
+            @ModelAttribute("roles") Set<Role> roles) {
+
+        roles.addAll(userService.getUserById(id).getAuthorities());
+
+        User user = new User(id, name, lastname, age, username, password, roles);
+        userService.updateUser(user);
         return "redirect:/adminPanel";
     }
 }
