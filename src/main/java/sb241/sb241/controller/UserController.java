@@ -36,7 +36,7 @@ public class UserController {
         return "userInfo";
     }
 
-    @PostMapping("/deleteUser")
+    @PostMapping("/deleteteUser")
     public String deleteUser(@RequestParam("delId") Long id) {
         userService.deleteUserById(id);
         return "redirect:/adminPanel";

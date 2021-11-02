@@ -1,5 +1,5 @@
-<div th:fragment="modal (tuser)">
-    <div class="modal" tabindex="-1" role="form" id="emodal" th:attrappend="id=${tuser.id}" aria-hidden="true">
+<div th:fragment="modal">
+    <div class="modal" tabindex="-1" role="form" id="emodal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -9,56 +9,78 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form th:action="@{/editUser}" method="post">
 
-                        <div class="form-group">
-                            <label for="id">ID</label>
-                            <input type="text" class="form-control" id="id" placeholder="Enter First Name" readonly
-                                   th:name="id" th:value="*{tuser.id}">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" readonly hidden="hidden"
-                                   th:name="password" th:value="*{tuser.password}">
-                        </div>
+                    <div class="form-group">
+                        <label for="id">ID</label>
+                        <input type="text" class="form-control" id="id" placeholder="Enter ID" readonly>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="first-name"> First Name</label>
-                            <input type="text" class="form-control" id="first-name" placeholder="Enter Last Name"
-                                   th:name="name" th:value="*{tuser.name}">
-                        </div>
+                    <div class="form-group">
+                        <label for="name">First Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter Name">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="last-name">Last Name</label>
-                            <input type="text" class="form-control" id="last-name" placeholder="Enter Age"
-                                   th:name="lastName" th:value="*{tuser.lastName}">
-                        </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" class="form-control" id="lastName" placeholder="Enter Last Name">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="age">Age</label>
-                            <input type="text" class="form-control" id="age" placeholder="Enter Age"
-                                   th:name="age" th:value="*{tuser.age}">
-                        </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="text" class="form-control" id="age" placeholder="Enter Age">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" placeholder="Enter Username"
-                                   th:name="username" th:value="*{tuser.username}">
-                        </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="email" class="form-control" id="username" placeholder="Enter Username">
+                    </div>
 
-                        <div class="form-group">
-                            <label for="roles">Role</label>
-                            <select multiple class="form-control" id="roles" name="roles" th:value="${tuser.authorities}" >
-                                <option th:selected="true" th:each="role : ${allRoles}" th:value="${role.id}" th:text="${role.roleName.replace('ROLE_', '')}"></option>
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <label for="eroles">Role</label>
+                        <select multiple class="form-control" id="eroles" name="eroles"></select>
+                    </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-danger">Save</button>
-                        </div>
-                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger" onclick="saveUser()">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        async function saveUser() {
+            let emodal = document.getElementById('emodal');
+
+            user.name = emodal.querySelector('.modal-body input[id=name]').value;
+            user.lastName = emodal.querySelector('.modal-body input[id=lastName]').value;
+            user.age = emodal.querySelector('.modal-body input[id=age]').value;
+            user.username = emodal.querySelector('.modal-body input[id=username]').value;
+            user.authorities = [];
+
+            let roles = document.getElementById('eroles');
+            let options = Array.apply(null, roles.options);
+            options.map(opt =>
+                opt.selected ?
+                    allRoles.map(x => (x.id == opt.value) ? user.authorities.push(x) : console.log(""))
+                    : null);
+
+            console.log(user)
+
+            await fetch("http://localhost:8080/saveUser", {
+                method: 'POST',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(user)
+            });
+
+            $('#emodal').modal('hide');
+            await getUsers();
+
+        }
+    </script>
 </div>

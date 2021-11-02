@@ -1,0 +1,10 @@
+<div th:fragment="header">
+  <nav class="navbar navbar-dark bg-dark">
+        <span>
+        <span class="navbar-brand mb-0 h1" th:text="${user.username}"></span>
+        <span class="navbar-brand mb-0 h1">with roles:</span>
+        <span class="navbar-brand mb-0 h1" th:text="${roles}"></span>
+        </span>
+    <a class="link-dark my-2 my-sm-0 text-light bg-dark" href="\logout">Logout</a>
+  </nav>
+</div>

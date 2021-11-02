@@ -1,42 +1,86 @@
 <div th:fragment="userForm">
     <div class="container-fluid">
         <div class="row justify-content-md-center">
-            <form action="#" th:action="@{/saveNewUser}" th:object="${newUser}" method="post" class="justify-content-md-center">
-                <div class="form-group" >
+            <form class="justify-content-md-center" id="newUserForm">
+                <div class="form-group">
                     <label for="first-name"> First Name</label>
-                    <input type="text" class="form-control" id="first-name" aria-describedby="firstname"
-                           placeholder="Enter First Name" th:field="*{name}">
+                    <input type="text" class="form-control" id="first-name" placeholder="Enter First Name">
                 </div>
                 <div class="form-group">
                     <label for="last-name">Last Name</label>
-                    <input type="text" class="form-control" id="last-name" aria-describedby="lastname"
-                           placeholder="Enter Last Name" th:field="*{lastName}">
+                    <input type="text" class="form-control" id="last-name" placeholder="Enter Last Name">
                 </div>
                 <div class="form-group">
                     <label for="age">Age</label>
-                    <input type="number" class="form-control" id="age" aria-describedby="age"
-                           placeholder="Enter Age" th:field="*{age}">
+                    <input type="number" class="form-control" id="age" placeholder="Enter Age">
                 </div>
                 <div class="form-group">
                     <label for="Email">Email</label>
-                    <input type="email" class="form-control" id="Email" placeholder="email" th:field="*{username}">
+                    <input type="email" class="form-control" id="Email" placeholder="email">
                 </div>
                 <div class="form-group">
                     <label for="pass">Password</label>
-                    <input type="password" class="form-control" id="pass" placeholder="Password" th:field="*{password}">
+                    <input type="password" class="form-control" id="pass" placeholder="Password">
                 </div>
                 <div class="form-group">
-                    <label for="roles">Role</label>
-                    <select multiple class="form-control" id="roles" th:field="*{authorities}">
-                        <div th:each="role : ${allRoles}">
-                            <option th:value="${role.id}" th:text="${role.roleName.replace('ROLE_', '')}">role</option>
-                        </div>
-                    </select>
+                    <label for="allRoles">Role</label>
+                    <select multiple class="form-control" id="allRoles"></select>
                 </div>
                 <div class="row justify-content-md-center">
-                    <button type="submit" class="btn btn-success">Add new user</button>
+                    <button type="button" class="btn btn-success" onclick="saveNewUser()">Add new user</button>
                 </div>
             </form>
         </div>
     </div>
+    <script>
+        let allRoles = [];
+
+        async function saveNewUser() {
+            let form = document.getElementById('newUserForm');
+            let newUser = new Object();
+
+            newUser.name = form.querySelector('.form-group input[id=first-name]').value;
+            newUser.lastName = form.querySelector('.form-group input[id=last-name]').value;
+            newUser.age = form.querySelector('.form-group input[id=age]').value;
+            newUser.username = form.querySelector('.form-group input[id=Email]').value;
+            newUser.password = form.querySelector('.form-group input[id=pass]').value;
+            newUser.authorities = [];
+
+            let allRolesSelection = document.getElementById('allRoles');
+            let options = Array.apply(null, allRolesSelection.options);
+            options.map(opt =>
+               opt.selected ?
+                    allRoles.map(x => (x.id == opt.value) ? newUser.authorities.push(x) : null)
+               : null);
+
+            await fetch("http://localhost:8080/saveUser", {
+                method: 'POST',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            });
+
+            $('.nav-tabs a[id=admin-tab]').click();
+            await getUsers();
+
+        }
+        async function getAllRoles() {
+            (await fetch('http://localhost:8080/getAllRoles')).json().then(result => {
+                allRoles = result;
+                let i = 0;
+                $('#allRoles').empty();
+                for (i in result) {
+                    $('#allRoles').append(new Option(
+                        result[i].roleName.replace('ROLE_', ''),
+                        result[i].id,
+                        false, true));
+                }
+            });
+        }
+        getAllRoles();
+    </script>
 </div>

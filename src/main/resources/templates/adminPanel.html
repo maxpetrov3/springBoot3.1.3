@@ -5,7 +5,7 @@
         </div>
         <div class="row-12">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
+                <li class="nav-item" id="uTable">
                     <a class="nav-link active" id="admin-tab" data-toggle="tab" href="#user-table" role="tab"
                        aria-controls="admin" aria-selected="true">Users table</a>
                 </li>
@@ -34,33 +34,45 @@
                                 <th scope="col">Edit</th>
                                 <th scope="col">Delete</th>
                                 </thead>
-                                <tbody>
-                                <tr th:each="tuser : ${users}">
-                                    <td><span th:text="${tuser.getId()}"> Title </span></td>
-                                    <td><span th:text="${tuser.getName()}"> Title </span></td>
-                                    <td><span th:text="${tuser.getLastName()}"> Title </span></td>
-                                    <td><span th:text="${tuser.getAge()}"> Title </span></td>
-                                    <td><span th:text="${tuser.getUsername()}"> Title </span></td>
-                                    <td><span th:each="role: ${tuser.authorities}">
-                                        <span th:text="${role.authority.replace('ROLE_', '')}"></span>
-                                    </span>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-info" data-toggle="emodal" data-target="#emodal"
-                                                th:attrappend="data-target=${tuser.id}">Edit</button>
-                                        <div th:replace="/editModal :: modal(${tuser})"></div>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-danger" data-toggle="modal" data-target="#modal"
-                                                th:attrappend="data-target=${tuser.id}">Delete</button>
-                                        <div th:replace="/deleteModal :: modal(${tuser})"></div>
-                                    </td>
-                                </tr>
+                                <tbody id="userList">
+                                <script>
+                                    async function getUsers() {
+                                        let response = await fetch("http://localhost:8080/allUsers");
+                                        let list = document.getElementById("userList")
+                                        $('#userList').empty();
+                                        response.json().then(users => {
+                                            let key
+
+                                            for (key in users) {
+                                                let roleKey = 0
+                                                let roles = ""
+                                                for (roleKey in users[key].authorities) {
+                                                    roles += users[key].authorities[roleKey].roleName.replace("ROLE_", "") + " ";
+                                                }
+                                                list.innerHTML += '<tr >' +
+                                                    '<td><span>' + users[key].id + '</span></td>\n' +
+                                                    '<td><span>' + users[key].name + '</span></td>\n' +
+                                                    '<td><span>' + users[key].lastName + '</span></td>\n' +
+                                                    '<td><span>' + users[key].age + '</span></td>\n' +
+                                                    '<td><span>' + users[key].username + '</span></td>\n' +
+                                                    '<td><span>' + roles + '</span></td>\n' +
+
+                                                    '<td><button class="btn btn-info" onclick="editUserModal(' + users[key].id + ')">Edit</button></td>' +
+
+                                                    '<td><button class="btn btn-danger" onclick="deleteUserModal(' + users[key].id + ')">Delete</button>' +
+                                                    '</td></tr>';
+                                            }
+                                        })
+                                    }
+                                    getUsers();
+                                </script>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+                <div th:replace="/editModal :: modal"></div>
+                <div th:replace="/deleteModal :: modal"></div>
                 <div class="tab-pane fade" id="new-user" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="card-header">
                         <h3>Add new user</h3>
@@ -74,5 +86,62 @@
             </div>
         </div>
     </div>
+    <script>
+        let user;
+
+        async function editUserModal(userId) {
+            $('#emodal').modal('show');
+
+            let emodal = document.getElementById('emodal')
+
+
+            let response = await fetch("http://localhost:8080/getUserById?id=" + userId);
+            response.json().then(result => {
+                user = result;
+                emodal.querySelector('.modal-body input[id=id]').value = result.id
+                emodal.querySelector('.modal-body input[id=name]').value = result.name
+                emodal.querySelector('.modal-body input[id=lastName]').value = result.lastName
+                emodal.querySelector('.modal-body input[id=age]').value = result.age
+                emodal.querySelector('.modal-body input[id=username]').value = result.username
+
+                let i = 0
+                $('#eroles').empty();
+                allRoles.map(role =>
+                    $('#eroles').append(new Option(
+                        role.roleName.replace('ROLE_', ''),
+                        role.id,
+                        false,
+                        result.authorities.find(x => x.id === role.id) != null
+                        )
+                    )
+                );
+            })
+        }
+
+        async function deleteUserModal(userId) {
+            $('#dmodal').modal('show');
+
+            let dmodal = document.getElementById('dmodal');
+
+            let response = await fetch("http://localhost:8080/getUserById?id=" + userId);
+            response.json().then(user => {
+
+                dmodal.querySelector('.modal-body input[id=id]').value = user.id;
+                dmodal.querySelector('.modal-body input[id=name]').value = user.name;
+                dmodal.querySelector('.modal-body input[id=lastname]').value = user.lastName;
+                dmodal.querySelector('.modal-body input[id=age]').value = user.age;
+                dmodal.querySelector('.modal-body input[id=username]').value = user.username;
+
+                let i = 0
+                $('#droles').empty();
+                for (i in user.authorities) {
+                    $('#droles').append(new Option(
+                        user.authorities[i].roleName.replace('ROLE_', ''),
+                        user.authorities[i].id,
+                        true, true));
+                }
+            });
+        }
+    </script>
 </div>
-</div>
+

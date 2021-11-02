@@ -1,5 +1,5 @@
-<div th:fragment="modal (tuser)">
-    <div class="modal" tabindex="-1" role="form" id="modal" th:attrappend="id=${tuser.id}" aria-hidden="true">
+<div th:fragment="modal" xmlns="">
+    <div class="modal" tabindex="-1" role="form" id="dmodal" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -11,46 +11,55 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="id">ID</label>
-                        <input type="text" class="form-control" id="id" readonly
-                               placeholder="Enter First Name" th:value="${tuser.id}">
+                        <input type="text" class="form-control" id="id" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="first-name"> First Name</label>
-                        <input type="text" class="form-control" id="first-name" readonly
-                               placeholder="Enter Last Name" th:value="${tuser.name}">
+                        <label for="name">First Name</label>
+                        <input type="text" class="form-control" id="name" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="last-name">Last Name</label>
-                        <input type="text" class="form-control" id="last-name" readonly
-                               placeholder="Enter Age" th:value="${tuser.lastName}">
+                        <label for="lastname">Last Name</label>
+                        <input type="text" class="form-control" id="lastname" readonly>
                     </div>
                     <div class="form-group">
                         <label for="age">Age</label>
-                        <input type="text" class="form-control" id="age" readonly
-                               placeholder="Enter Age" th:value="${tuser.age}">
+                        <input type="text" class="form-control" id="age" readonly>
                     </div>
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" readonly
-                               placeholder="Enter Username" th:value="${tuser.username}">
+                        <input type="text" class="form-control" id="username" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="roles">Role</label>
-                        <select multiple class="form-control" id="roles" th:value="${tuser.authorities}" readonly>
-                            <div th:each="role : ${tuser.authorities}">
-                                <option th:value="${role.id}" th:text="${role.roleName.replace('ROLE_', '')}">role</option>
-                            </div>
-                        </select>
+                        <label for="droles">Role</label>
+                        <select multiple class="form-control" id="droles" readonly></select>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
-                    <form th:action="@{/deleteUser}" method="post">
-                        <button type="submit"  class="btn btn-danger"
-                                th:name = "delId" th:value="${tuser.id}">Delete</button>
-                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit"  class="btn btn-danger" onclick="deleteUser()" >Delete</button>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        async function deleteUser(){
+            let dmodal = document.getElementById('dmodal');
+
+            let id = dmodal.querySelector('.modal-body input[id=id]').value
+
+            await fetch("http://localhost:8080/deleteUser", {
+                method: 'POST',
+                mode: 'cors',
+                cache: 'no-cache',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(id)
+            });
+
+            $('#dmodal').modal('hide');
+            await getUsers();
+        }
+    </script>
 </div>
