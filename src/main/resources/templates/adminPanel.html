@@ -37,7 +37,7 @@
                                 <tbody id="userList">
                                 <script>
                                     async function getUsers() {
-                                        let response = await fetch("http://localhost:8080/allUsers");
+                                        let response = await fetch("http://localhost:8080/api/users");
                                         let list = document.getElementById("userList")
                                         $('#userList').empty();
                                         response.json().then(users => {
@@ -95,7 +95,7 @@
             let emodal = document.getElementById('emodal')
 
 
-            let response = await fetch("http://localhost:8080/getUserById?id=" + userId);
+            let response = await fetch("http://localhost:8080/api/getUser?id=" + userId);
             response.json().then(result => {
                 user = result;
                 emodal.querySelector('.modal-body input[id=id]').value = result.id
@@ -123,7 +123,7 @@
 
             let dmodal = document.getElementById('dmodal');
 
-            let response = await fetch("http://localhost:8080/getUserById?id=" + userId);
+            let response = await fetch("http://localhost:8080/api/getUser?id=" + userId);
             response.json().then(user => {
 
                 dmodal.querySelector('.modal-body input[id=id]').value = user.id;

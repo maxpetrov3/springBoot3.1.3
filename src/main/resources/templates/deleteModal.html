@@ -47,8 +47,8 @@
 
             let id = dmodal.querySelector('.modal-body input[id=id]').value
 
-            await fetch("http://localhost:8080/deleteUser", {
-                method: 'POST',
+            await fetch("http://localhost:8080/api/users", {
+                method: 'DELETE',
                 mode: 'cors',
                 cache: 'no-cache',
                 credentials: 'same-origin',

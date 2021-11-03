@@ -53,7 +53,7 @@
                     allRoles.map(x => (x.id == opt.value) ? newUser.authorities.push(x) : null)
                : null);
 
-            await fetch("http://localhost:8080/saveUser", {
+            await fetch("http://localhost:8080/api/users", {
                 method: 'POST',
                 mode: 'cors',
                 cache: 'no-cache',
@@ -69,7 +69,7 @@
 
         }
         async function getAllRoles() {
-            (await fetch('http://localhost:8080/getAllRoles')).json().then(result => {
+            (await fetch('http://localhost:8080/api/roles')).json().then(result => {
                 allRoles = result;
                 let i = 0;
                 $('#allRoles').empty();
