@@ -10,7 +10,7 @@ import sb241.sb241.repositories.UserRepository;
 import java.util.List;
 
 @CrossOrigin
-@RestController("/api")
+@RestController("/api/users")
 public class RestUserController {
 
 
@@ -18,7 +18,7 @@ public class RestUserController {
     private UserRepository userRepository;
 
 
-    @GetMapping("/api/users")
+    @GetMapping
     public ResponseEntity<List> getAllUsers() {
 
         return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
@@ -30,12 +30,12 @@ public class RestUserController {
         return new ResponseEntity<>(userRepository.findById(id).get(), HttpStatus.OK);
     }
 
-    @PostMapping("/api/users")
+    @PostMapping
     public void saveUser(@RequestBody User user) {
         userRepository.save(user);
     }
 
-    @DeleteMapping("/api/users")
+    @DeleteMapping
     public void deleteUser(@RequestBody Long id) {
         userRepository.deleteById(id);
     }
